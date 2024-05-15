@@ -8,7 +8,7 @@ const signUpController = async(req,res,next) =>{
         const newUser = new User({name,email,password,role});
         await newUser.save();
 
-        res.status(201).json({message :"user registered successfully"});
+        res.status(201).json({code:201, status: true,message :"user registered successfully"});
         
     }catch(error){
         next(error);
