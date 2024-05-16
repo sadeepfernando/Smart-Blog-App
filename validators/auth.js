@@ -18,7 +18,7 @@ const signupValidator =
     check('password')
     .isLength({min:5})
     .withMessage('Should be more than 5 characters')
-    .isEmpty()
+    .notEmpty()
     .withMessage('Password is required')
 
 ];

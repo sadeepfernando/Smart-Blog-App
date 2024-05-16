@@ -1,4 +1,5 @@
 const {User} = require('../models/index');
+const hashPassword = require('../utils/hashPassword');
 
 
 const signUpController = async(req,res,next) =>{
@@ -13,8 +14,9 @@ const signUpController = async(req,res,next) =>{
             throw new Error('Email already exists');
         }
 
+        const hashedPassword =  await hashPassword(password);
 
-        const newUser = new User({name,email,password,role});
+        const newUser = new User({name,email,password: hashedPassword,role});
         await newUser.save();
 
         res.status(201).json({code:201, status: true,message :"user registered successfully"});
