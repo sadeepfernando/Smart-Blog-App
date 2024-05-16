@@ -23,7 +23,23 @@ const signupValidator =
 
 ];
 
+const signinValidator =
+[
+    //email validation
+    check('email')
+    .isEmail()
+    .withMessage('Invalid Email')
+    .notEmpty()
+    .withMessage('Email is required'),
+
+    //password validation
+    check('password')
+    .notEmpty()
+    .withMessage('Password is required')
+];
+
 module.exports = 
 {
-    signupValidator
+    signupValidator,
+    signinValidator
 };

@@ -1,5 +1,6 @@
 const {User} = require('../models/index');
 const hashPassword = require('../utils/hashPassword');
+const comparePassword = require('../utils/comparePassword');
 
 
 const signUpController = async(req,res,next) =>{
@@ -26,7 +27,33 @@ const signUpController = async(req,res,next) =>{
     }
 }
 
+const signInController = async(req,res,next) =>{
+    try{
+        const {email, password} = req.body;
+        
+        const user = await User.findOne({email});
+        if(!user){
+            res.code = 401;
+            throw new Error('Invalid credentials')
+        }
+
+        //matching the password
+        const passwordMatch = await comparePassword(password,user.password);
+        if(!passwordMatch){
+            res.code = 401;
+            throw new Error('Invalid credentials');
+        }
+
+        res.status(200)
+        .json({code:200,status:true,message:'User signIn sucessfully'});
+
+    }catch(error){
+        next(error);
+    }
+}
+
 module.exports =
  {
-    signUpController
+    signUpController,
+    signInController
 }
