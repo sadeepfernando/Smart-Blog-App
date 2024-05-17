@@ -179,6 +179,15 @@ const recoverPassword = async(req,res,next) =>{
     }
 }
 
+const changePassword = async(req,res,next) =>{
+    try{
+        res.json(req.user);
+        
+    }catch(error){
+        next(error);
+    }
+}
+
 
 
 module.exports =
@@ -188,5 +197,6 @@ module.exports =
     verifyCode,
     verifyUser,
     forgotPasswordCode,
-    recoverPassword
+    recoverPassword,
+    changePassword
 }
