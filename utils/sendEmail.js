@@ -1,4 +1,5 @@
 const nodeMailer = require('nodemailer');
+const {senderEmail,emailPassword} = require('../config/keys');
 
 
 const sendEmail = async({emailTo, subject, code, content}) =>{
@@ -7,8 +8,8 @@ const sendEmail = async({emailTo, subject, code, content}) =>{
         port : 587,
         secure : false,
         auth : {
-            user : "shiwanthafernando33879@gmail.com",
-            pass : "tmnw jmuc tldb qrbe",
+            user : senderEmail,
+            pass : emailPassword,
         },
     });
 
