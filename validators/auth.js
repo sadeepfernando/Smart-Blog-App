@@ -38,8 +38,18 @@ const signinValidator =
     .withMessage('Password is required')
 ];
 
+const emailValidator =
+[
+    check('email')
+    .isEmail()
+    .withMessage('Invalid email')
+    .notEmpty()
+    .withMessage('Email is required')
+];
+
 module.exports = 
 {
     signupValidator,
-    signinValidator
+    signinValidator,
+    emailValidator
 };

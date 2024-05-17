@@ -2,6 +2,7 @@ const {User} = require('../models/index');
 const hashPassword = require('../utils/hashPassword');
 const comparePassword = require('../utils/comparePassword');
 const generateToken = require('../utils/generateToken');
+const generateCode = require('../utils/generateCode');
 
 
 const signUpController = async(req,res,next) =>{
@@ -56,8 +57,41 @@ const signInController = async(req,res,next) =>{
     }
 }
 
+const verifyCode = async(req,res,next){
+    try{
+        const {email} = req.body;
+
+        const user = await User.findOne({email});
+        if(!user){
+            res.code = 404;
+            throw new Error('user not found')
+        }
+
+        //user.isVerified === true is same as user.isVerified
+        if(user.isVerified){
+            res.code = 400;
+            throw new Error('User already verified')
+        }
+
+        //storing the generated code
+        const code = generateCode(6);
+        user.verifyCode = code;
+        await user.save();
+
+        //send email
+
+
+        res.status(200).json({code:200,status:true,message:'User verification code send successfully'})
+    }catch(error){
+        next(error);
+    }
+}
+
+
+
 module.exports =
  {
     signUpController,
-    signInController
+    signInController,
+    verifyCode
 }
