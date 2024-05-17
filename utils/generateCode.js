@@ -1,5 +1,5 @@
 const generateCode = (codeLength) =>{
-    const number = String(math.random()).split('.')[1].split('');
+    const number = String(Math.random()).split('.')[1].split('');
     const length = number.length;
     let code = '';
 

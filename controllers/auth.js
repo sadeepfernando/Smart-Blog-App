@@ -3,6 +3,8 @@ const hashPassword = require('../utils/hashPassword');
 const comparePassword = require('../utils/comparePassword');
 const generateToken = require('../utils/generateToken');
 const generateCode = require('../utils/generateCode');
+const nodeMailer = require('../utils/sendEmail');
+const sendEmail = require('../utils/sendEmail');
 
 
 const signUpController = async(req,res,next) =>{
@@ -57,7 +59,7 @@ const signInController = async(req,res,next) =>{
     }
 }
 
-const verifyCode = async(req,res,next){
+const verifyCode = async(req,res,next) =>{
     try{
         const {email} = req.body;
 
@@ -75,11 +77,16 @@ const verifyCode = async(req,res,next){
 
         //storing the generated code
         const code = generateCode(6);
-        user.verifyCode = code;
+        user.verificationCode = code;
         await user.save();
 
         //send email
-
+        await sendEmail({
+            emailTo : user.email,
+            subject:'Email verification code',
+            code,
+            content:'Verify your account',
+        });
 
         res.status(200).json({code:200,status:true,message:'User verification code send successfully'})
     }catch(error){
