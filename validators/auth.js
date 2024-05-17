@@ -63,10 +63,34 @@ const verifyUserValidator =
 
 ];
 
+const recoverPasswordValidator =
+[
+        //Email validation
+        check('email')
+        .isEmail()
+        .withMessage('Invalid email')
+        .notEmpty()
+        .withMessage('Email is required'),
+
+        //code validation
+         check('code')
+         .notEmpty()
+         .withMessage('Code is required'),
+
+        //password validation
+        check('password')
+        .isLength({min:5})
+        .withMessage('Should be more than 5 characters')
+        .notEmpty()
+        .withMessage('Password is required')
+
+]   
+
 module.exports = 
 {
     signupValidator,
     signinValidator,
     emailValidator,
-    verifyUserValidator
+    verifyUserValidator,
+    recoverPasswordValidator
 };

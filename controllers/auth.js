@@ -145,7 +145,35 @@ const forgotPasswordCode = async(req,res,next) =>{
         res.status(200)
         .json({code:200, status:true, message:'Forgot password code send successfully'});
 
-        
+
+    }catch(error){
+        next(error);
+    }
+}
+
+const recoverPassword = async(req,res,next) =>{
+    try{
+        const {email, code, password} = req.body;
+
+        const user = await User.findOne({email});
+        if(!user){
+            res.code = 400;
+            throw new Error('User not found');
+        }
+        if(user.forgotPasswordCode !== code){
+            res.code =400;
+            throw new Error('Invalid code');
+        }
+
+        const hashedPassword = await hashPassword(password);
+        user.password = hashedPassword;
+        user.forgotPasswordCode = null;
+        await user.save();
+
+        res.status(200)
+        .json({code:200, status: true, message: 'Password recovered successfully'});
+
+
     }catch(error){
         next(error);
     }
@@ -159,5 +187,6 @@ module.exports =
     signInController,
     verifyCode,
     verifyUser,
-    forgotPasswordCode
+    forgotPasswordCode,
+    recoverPassword
 }
