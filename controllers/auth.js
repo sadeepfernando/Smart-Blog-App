@@ -181,8 +181,37 @@ const recoverPassword = async(req,res,next) =>{
 
 const changePassword = async(req,res,next) =>{
     try{
+        const {oldPassword, newPassword} = req.body;
+        const {_id} = req.user;
+
+        const user = await User.findById(_id);
+        if(!user){
+            res.code = 404;
+            throw new Error('User not found');
+        }
+
+        const match = comparePassword(oldPassword, user.password);
+        if(!match){
+            res.code = 400;
+            throw new Error('Password is not matching');
+        }
+
+        if(oldPassword === newPassword){
+            res.code = 401;
+            throw new Error('You are provinding the same old password');
+        }
+
+        const hashedPassword = await hashPassword(newPassword);
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200)
+        .json({code: 200, status : true, message: 'Change password is successfull'});
+
+
+
         res.json(req.user);
-        
+
     }catch(error){
         next(error);
     }
