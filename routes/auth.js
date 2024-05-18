@@ -9,7 +9,8 @@ signinValidator,
 emailValidator,
 verifyUserValidator, 
 recoverPasswordValidator, 
-changePasswordValidator
+changePasswordValidator,
+updateProfileValidator
 
 } = require('../validators/auth');
 
@@ -28,7 +29,9 @@ router.post('/forgot-password-code', emailValidator, validate, authController.fo
 
 router.post('/recover-password', recoverPasswordValidator, validate , authController.recoverPassword);
 
-router.put('/change-password', changePasswordValidator, validate,  isAuth, authController.changePassword);
+router.put('/change-password',  isAuth , changePasswordValidator, validate, authController.changePassword);
+
+router.put('/update-profile', isAuth , updateProfileValidator, validate , authController.updateProfile );
 
 
 
