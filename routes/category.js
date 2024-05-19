@@ -4,8 +4,9 @@ const {categoryController} = require('../controllers/index');
 const {addCatagoryValidator} = require('../validators/category');
 const validate = require('../validators/validate');
 const isAuth = require('../middlewares/isAuth');
+const isAdmin = require('../middlewares/isAdmin');
 
-router.post('/', isAuth , addCatagoryValidator , validate , categoryController.addCategory);
+router.post('/', isAuth , isAdmin , addCatagoryValidator , validate , categoryController.addCategory);
 
 
 module.exports = router;
