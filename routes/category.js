@@ -10,5 +10,7 @@ router.post('/', isAuth , isAdmin , addCatagoryValidator , validate , categoryCo
 
 router.put('/:id', isAuth , isAdmin ,idValidator, validate , categoryController.updateCategory );
 
+router.delete('/:id', isAuth , isAdmin , idValidator , validate, categoryController.deleteCategory);
+
 
 module.exports = router;
