@@ -87,8 +87,10 @@ const deleteCategory = async(req,res, next) =>{
 
 const getCategories = async(req, res, next) =>{
     try{
-        const { q } = req.query;
+        const { q , size ,page } = req.query;
         let query = {};
+        const sizeNumber = parseInt(size) || 10;
+        const pageNumber = parseInt(page) || 1;
 
         if(q){
 
@@ -97,11 +99,21 @@ const getCategories = async(req, res, next) =>{
             //It will return categories according to both title and description ket words
             query = { $or :[ {title : search}, {desc: search} ]};
         }
+        //pagination according to number of resulted categories
+        const total = await Category.countDocuments(query);
+        const pages = Math.ceil(total / sizeNumber);
 
-        const categories = await Category.find(query);
+         //skip is used to skip first n documents in the database and display for that onwards
+        //Limit used to get the range that should display
+        // ((5-1)*10 = 40)and by the use of limit it shows 40 - 50 documents(change according to sizeNumber)
+        //sort is used to show the list in desecnding order
+        const categories = await Category.find(query)
+                            .skip( (pageNumber - 1) * sizeNumber)
+                            .limit(sizeNumber)
+                            .sort({updatedBy : -1});
 
         res.code = 200;
-        res.status(200).json({code: 200, status:true, message:'Get categories successfully', data: {categories}});
+        res.status(200).json({code: 200, status:true, message:'Get categories successfully', data: {categories, total, pages}});
 
     }catch(error){
         next(error);
