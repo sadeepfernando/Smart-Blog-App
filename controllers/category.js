@@ -61,7 +61,7 @@ const updateCategory = async(req, res, next) =>{
         .json({code:200, status:true, message:'Category updated successfully', data: {category}});
 
     }catch(error){
-        next();
+        next(error);
     }
 }
 
@@ -81,7 +81,30 @@ const deleteCategory = async(req,res, next) =>{
         .json({code:200, status: true, message:'Category deleted successfully'});
 
     }catch(error){
-        next();
+        next(error);
+    }
+}
+
+const getCategories = async(req, res, next) =>{
+    try{
+        const { q } = req.query;
+        let query = {};
+
+        if(q){
+
+            //'i' is a flag that use to identify both simple and capital strings
+            const search = RegExp(q, 'i');
+            //It will return categories according to both title and description ket words
+            query = { $or :[ {title : search}, {desc: search} ]};
+        }
+
+        const categories = await Category.find(query);
+
+        res.code = 200;
+        res.status(200).json({code: 200, status:true, message:'Get categories successfully', data: {categories}});
+
+    }catch(error){
+        next(error);
     }
 }
 
@@ -92,4 +115,5 @@ module.exports =
     addCategory,
     updateCategory,
     deleteCategory,
+    getCategories,
 }
