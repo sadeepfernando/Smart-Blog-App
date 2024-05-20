@@ -120,6 +120,24 @@ const getCategories = async(req, res, next) =>{
     }
 }
 
+const getCategory = async(req,res,next) =>{
+    try{
+        const { id } = req.params;
+
+        const category = await Category(id);
+        if(!category){
+            res.code = 404;
+            throw new Error(error);
+        }
+
+        res.status(200)
+        .json({ code : 200, status: true, message:'Category found successfully', data:{category} });
+
+    }catch(error){
+        next(error);
+    }
+}
+
 
 
 module.exports =
@@ -128,4 +146,5 @@ module.exports =
     updateCategory,
     deleteCategory,
     getCategories,
+    getCategory,
 }
