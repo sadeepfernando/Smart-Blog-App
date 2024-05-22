@@ -1,9 +1,10 @@
 const express = require('express');
-const router = express.Router;
+const router = express.Router();
 const isAuth = require('../middlewares/isAuth');
 const {fileController} = require('../controllers/index');
+const uploads  = require('../middlewares/uploads');
 
-router.post('/upload', isAuth , fileController.uploadFile);
+router.post('/upload', isAuth , uploads.single('image') , fileController.uploadFile);
 
 
 module.exports = router;
