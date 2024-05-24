@@ -23,7 +23,16 @@ const storage = multer.diskStorage({
 })
 
 const uploads = multer({
-    storage: storage
+    storage: storage,
+    fileFilter: (req,file,callback) =>{
+        const mimeType = file.mimetype;
+
+        if(mimeType === 'image/jpg' || mimeType ==='image/jpeg' || mimeType==='image/png' || mimeType==='application/pdf'){
+            callback(null, true);
+        }else{
+            callback(new Error('Insert a valid file format'));
+        }
+    }
 });
 
 
