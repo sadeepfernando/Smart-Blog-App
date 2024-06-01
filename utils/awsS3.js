@@ -1,6 +1,7 @@
-const { PutObjectCommand ,S3Client } = require('@aws-sdk/client-s3');
+const { PutObjectCommand ,S3Client , GetObjectCommand } = require('@aws-sdk/client-s3');
 const { awsRegion, awsAccessKey,awsSecretAccessKey, awsbucketName } = require('../config/keys');
 const generateCode = require('./generateCode');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const client = new S3Client({
     region: awsRegion,
@@ -31,4 +32,22 @@ const uploadFileToS3 = async({file, extension}) =>{
    }
 }
 
-module.exports = { uploadFileToS3 };
+const signedUrl = async(Key) =>{
+    const params ={
+        Bucket:awsbucketName,
+        Key:Key,
+
+    }
+    const command = new GetObjectCommand(params);
+
+    try {
+        const url = await getSignedUrl(client,command, {expiresIn: 60});
+        return url;
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+module.exports = { uploadFileToS3 , signedUrl };
