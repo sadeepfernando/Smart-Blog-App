@@ -1,4 +1,4 @@
-const {User} = require('../models/index');
+const { User, File } = require('../models/index');
 const hashPassword = require('../utils/hashPassword');
 const comparePassword = require('../utils/comparePassword');
 const generateToken = require('../utils/generateToken');
@@ -221,7 +221,7 @@ const changePassword = async(req,res,next) =>{
 const updateProfile = async(req,res,next) =>{
     try{
         const {_id} = req.user;
-        const {name, email} = req.body;
+        const {name, email, profilePic } = req.body;
 
         //using select we can select times that should not be visible in the response body
         const user = await User.findById(_id).select("-password -verificationCode -forgotPasswordCode");
@@ -239,9 +239,20 @@ const updateProfile = async(req,res,next) =>{
             }
         }
 
+        //Update profile picture
+        if(profilePic){
+            const file = await findById(profilePic);
+
+            if(!file){
+                res.code = 404;
+                throw new Error('Profile picture not found');
+            }
+        }
+
         //If such a user is there update their profile or if not keep the old details as same
         user.name = name ?name : user.name;
         user.email = email ?email : user.email;
+        user.profilePic = profilePic;
 
         if(email){
             user.isVerified = false;
