@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 dotenv.config();
 const mongoDbConnection = require('./init/mongodb');
-const {authRoutes, categoryRoutes, fileRoutes } = require('./routes/index');
+const {authRoutes, categoryRoutes, fileRoutes , postRoutes } = require('./routes/index');
 const {errorHandler} = require('./middlewares/index');
 const notFound = require('./controllers/notFound');
 
@@ -23,6 +23,7 @@ app.use(morgan("dev"));
 app.use('/api/v1/auth',authRoutes);
 app.use('/api/v1/category',categoryRoutes);
 app.use('/api/v1/file', fileRoutes);
+app.use('/api/v1/post', postRoutes);
 
 
 //not found route
