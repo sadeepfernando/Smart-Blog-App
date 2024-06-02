@@ -33,6 +33,8 @@ router.put('/change-password',  isAuth , changePasswordValidator, validate, auth
 
 router.put('/update-profile', isAuth , updateProfileValidator, validate , authController.updateProfile );
 
+router.get('/current-user' , isAuth , authController.currentUser );
+
 
 
 module.exports = router;

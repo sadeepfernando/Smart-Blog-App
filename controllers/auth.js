@@ -268,6 +268,28 @@ const updateProfile = async(req,res,next) =>{
     }
 }
 
+const currentUser = async (req, res, next) =>{
+    try {
+        const { _id } = req.user;
+
+        const user = await User.findById(_id)
+        .select('-password -verificationCode -forgotPasswordCode')  //Do not show this things in the user object
+        .populate('profilePic');   //get the profile pic as an object
+
+        if(!user){
+            res.code =404;
+            throw new Error('User not found');
+        }
+        
+        //If the user fond
+        res.status(200)
+        .json({code:200, status:true, message:'Get user successfull', data:{ user }});
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 
 module.exports =
@@ -279,5 +301,6 @@ module.exports =
     forgotPasswordCode,
     recoverPassword,
     changePassword,
-    updateProfile
+    updateProfile,
+    currentUser,
 }
