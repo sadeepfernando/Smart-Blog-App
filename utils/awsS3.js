@@ -1,4 +1,4 @@
-const { PutObjectCommand ,S3Client , GetObjectCommand } = require('@aws-sdk/client-s3');
+const { PutObjectCommand ,S3Client , GetObjectCommand , DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { awsRegion, awsAccessKey,awsSecretAccessKey, awsbucketName } = require('../config/keys');
 const generateCode = require('./generateCode');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
@@ -49,5 +49,21 @@ const signedUrl = async(Key) =>{
     }
 }
 
+const deleteFileFromS3 = async(Key) =>{
+    const params = {
+        Bucket : awsbucketName,
+        Key: Key,
+    }
 
-module.exports = { uploadFileToS3 , signedUrl };
+    const command = new DeleteObjectCommand(params);
+    try {
+        await client.send(command);
+        return;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+module.exports = { uploadFileToS3 , signedUrl , deleteFileFromS3 };
