@@ -17,7 +17,7 @@ const addPost = async(req, res, next) =>{
         }
 
         //Check wheather the category exists
-        const isCategoryExist = await Category.findbyId(category);
+        const isCategoryExist = await Category.findById(category);
 
         if(!isCategoryExist){
             res.code = 404;

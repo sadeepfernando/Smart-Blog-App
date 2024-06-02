@@ -7,7 +7,7 @@ const validate = require('../validators/validate');
 
 
 
-router.get('/' , isAuth , addPostValidator , validate, postController.addPost );
+router.post('/' , isAuth , addPostValidator , validate, postController.addPost );
 
 
 
