@@ -108,10 +108,39 @@ const deletePost = async(req, res, next) =>{
     }
 }
 
+const getPost = async(req,res,next) =>{
+    try {
+        const { page, size , q } =req.query;
+
+        const pageNumber = parseInt(page) || 1;
+        const sizeNumber = parseInt(size) || 10;
+        const query = {};
+
+        if(q){
+            const search = new RegExp(q, 'i');
+
+            query = {
+                $or : [{title: search}]
+            }
+        }
+        const total = await Post.countDocuments(query);
+        const pages = Math.ceil(total / pageNumber);
+
+        const posts = await Post.find(query)
+                        .sort({updatedBy: -1})
+                        .skip((pageNumber - 1) * sizeNumber)
+                        .limit(sizeNumber);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 module.exports =
 {
     addPost,
     updatePost,
     deletePost,
+    getPost,
 }
