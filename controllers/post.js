@@ -124,12 +124,15 @@ const getPost = async(req,res,next) =>{
             }
         }
         const total = await Post.countDocuments(query);
-        const pages = Math.ceil(total / pageNumber);
+        const pages = Math.ceil(total / sizeNumber);
 
         const posts = await Post.find(query)
                         .sort({updatedBy: -1})
                         .skip((pageNumber - 1) * sizeNumber)
                         .limit(sizeNumber);
+          
+        res.status(200)
+        .json({code:200, status:true,message:'Get post list successfully', data:{posts,total,pages}});
 
     } catch (error) {
         next(error);

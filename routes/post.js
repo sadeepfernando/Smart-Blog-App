@@ -13,7 +13,7 @@ router.put('/:id', isAuth , updatePostValidator , idValidator , validate , postC
 
 router.delete('/:id' , isAuth , idValidator , validate , postController.deletePost);
 
-router.get('/', isAuth , );
+router.get('/', isAuth , postController.getPost );
 
 
 
