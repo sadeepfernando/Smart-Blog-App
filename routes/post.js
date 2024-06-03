@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const isAuth = require('../middlewares/isAuth');
 const { postController } = require('../controllers/index');
-const { addPostValidator , updatePostValidator } = require('../validators/post');
+const { addPostValidator , updatePostValidator , idValidator } = require('../validators/post');
 const validate = require('../validators/validate');
 
 
 
 router.post('/' , isAuth , addPostValidator , validate, postController.addPost );
 
-router.put('/:id', isAuth ,);
+router.put('/:id', isAuth , updatePostValidator , idValidator , validate , postController.updatePost );
 
 
 
