@@ -11,6 +11,8 @@ router.post('/' , isAuth , addPostValidator , validate, postController.addPost )
 
 router.put('/:id', isAuth , updatePostValidator , idValidator , validate , postController.updatePost );
 
+router.delete('/:id' , isAuth , idValidator , validate , postController.deletePost);
+
 
 
 module.exports = router;
