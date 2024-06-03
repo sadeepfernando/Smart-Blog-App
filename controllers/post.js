@@ -110,7 +110,7 @@ const deletePost = async(req, res, next) =>{
 
 const getPost = async(req,res,next) =>{
     try {
-        const { page, size , q } =req.query;
+        const { page, size , q , category } =req.query;
 
         const pageNumber = parseInt(page) || 1;
         const sizeNumber = parseInt(size) || 10;
@@ -123,6 +123,11 @@ const getPost = async(req,res,next) =>{
                 $or : [{title: search}]
             }
         }
+
+        if(category){
+            query = {...query, category};
+        }
+
         const total = await Post.countDocuments(query);
         const pages = Math.ceil(total / sizeNumber);
 
