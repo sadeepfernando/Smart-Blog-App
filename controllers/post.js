@@ -127,12 +127,36 @@ const getPost = async(req,res,next) =>{
         const pages = Math.ceil(total / sizeNumber);
 
         const posts = await Post.find(query)
+                        .populate('file')
+                        .populate('category')
+                        .populate('updatedBy ','-password -verificationCode -forgotPasswordCode')
                         .sort({updatedBy: -1})
                         .skip((pageNumber - 1) * sizeNumber)
                         .limit(sizeNumber);
           
         res.status(200)
         .json({code:200, status:true,message:'Get post list successfully', data:{posts,total,pages}});
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+const getSinglePost = async(req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const post = await Post.findById(id)
+                    .populate('file')
+                    .populate('category')
+                    .populate('updatedBy ','-password -verificationCode -forgotPasswordCode');
+
+        if(!post){
+            res.code = 404;
+            throw new Error('Post not found');
+        }
+
+        res.status(200)
+        .json({code:200, status:true , message:'Post found successfully'});
 
     } catch (error) {
         next(error);
@@ -146,4 +170,5 @@ module.exports =
     updatePost,
     deletePost,
     getPost,
+    getSinglePost,
 }
