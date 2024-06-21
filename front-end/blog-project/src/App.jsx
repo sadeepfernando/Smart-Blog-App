@@ -1,4 +1,4 @@
-import Home from '../src/pages/post/home';
+
 import { Route, Routes } from 'react-router-dom';
 import Home from '../src/pages/post/home';
 import CategoryList from '../src/pages/category/categoryList';
@@ -20,7 +20,7 @@ function App() {
         <Route path='/' element={<Home/>} />
         <Route path='categories' element={<CategoryList/>} />
         <Route path='posts' element={<PostList/>} />
-        <Route path='pofile' element={<Profile/>} />
+        <Route path='profile' element={<Profile/>} />
         <Route path='setting' element={<Setting/>} />
       </Route>
 
