@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useState } from "react";
 import signupValidator from "../../validators/signupValidator";
 
@@ -22,13 +23,16 @@ export default function signUp() {
   //for error handling
   const [formError, setFormError] = useState(initialFormError);
 
+  //for api request
+  const [loading, setLoading] = useState(false);
+
   //to handle events
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   //handle form submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const errors = signupValidator({
@@ -38,8 +42,39 @@ export default function signUp() {
       confirmPassword: formData.confirmPassword,
     });
 
-    if(errors.name || errors.email || errors.password || errors.confirmPassword){
+    if (
+      errors.name ||
+      errors.email ||
+      errors.password ||
+      errors.confirmPassword
+    ) {
       setFormError(errors);
+    } else {
+      //Api request from back end
+      try {
+        setLoading(true);
+
+        //Api request
+        const requestBody = {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        };
+
+        const response = await axios.post(
+          "http://localhost:8000/api/v1/auth/signup",
+          requestBody
+        );
+        console.log(response);
+
+        setFormData(initialFormData);
+        setFormError(initialFormError);
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        error.message;
+      }
     }
     console.log(formData);
   };
@@ -65,7 +100,7 @@ export default function signUp() {
         <div className="form-group">
           <label>Email</label>
           <input
-            type="email"
+            type="text"
             name="email"
             placeholder="SadeepFernando@gmail.com"
             className="form-control"
@@ -98,11 +133,13 @@ export default function signUp() {
             value={formData.confirmPassword}
             onChange={handleChange}
           />
-          {formError.confirmPassword && <p className="error">{formError.confirmPassword}</p>}
+          {formError.confirmPassword && (
+            <p className="error">{formError.confirmPassword}</p>
+          )}
         </div>
 
         <div className="form-group">
-          <input type="submit" className="button" value="Signup" />
+          <input type="submit" className="button" value={`${loading ? "Saving..." : "Signup"}`} />
         </div>
       </form>
     </div>
