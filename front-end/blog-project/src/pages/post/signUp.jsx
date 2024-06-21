@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import signupValidator from "../../validators/signupValidator";
 
 const initialFormData = {
   name: "",
@@ -23,12 +24,23 @@ export default function signUp() {
 
   //to handle events
   const handleChange = (e) => {
-    setFormData((prev) =>({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   //handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const errors = signupValidator({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+    });
+
+    if(errors.name || errors.email || errors.password || errors.confirmPassword){
+      setFormError(errors);
+    }
     console.log(formData);
   };
 
@@ -47,6 +59,7 @@ export default function signUp() {
             value={formData.name}
             onChange={handleChange}
           />
+          {formError.name && <p className="error">{formError.name}</p>}
         </div>
 
         <div className="form-group">
@@ -59,6 +72,7 @@ export default function signUp() {
             value={formData.email}
             onChange={handleChange}
           />
+          {formError.email && <p className="error">{formError.email}</p>}
         </div>
 
         <div className="form-group">
@@ -71,6 +85,7 @@ export default function signUp() {
             value={formData.password}
             onChange={handleChange}
           />
+          {formError.password && <p className="error">{formError.password}</p>}
         </div>
 
         <div className="form-group">
@@ -83,6 +98,7 @@ export default function signUp() {
             value={formData.confirmPassword}
             onChange={handleChange}
           />
+          {formError.confirmPassword && <p className="error">{formError.confirmPassword}</p>}
         </div>
 
         <div className="form-group">
