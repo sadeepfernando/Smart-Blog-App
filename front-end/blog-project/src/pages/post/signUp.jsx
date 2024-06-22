@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { useState } from "react";
 import signupValidator from "../../validators/signupValidator";
@@ -65,13 +66,23 @@ export default function signUp() {
           "http://localhost:8000/api/v1/auth/signup",
           requestBody
         );
-        console.log(response);
+        const data = response.data;
+        toast.success(data.message, {
+          position: "top-right",
+          autoClose: 2000,
+        })
 
         setFormData(initialFormData);
         setFormError(initialFormError);
 
         setLoading(false);
       } catch (error) {
+        const response = error.response;
+        const data = response.data;
+        toast.error(data.message,{
+          position: "top-right",
+          autoClose: 2000,
+        })
         setLoading(false);
         error.message;
       }
