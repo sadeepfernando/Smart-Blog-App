@@ -1,28 +1,27 @@
-import React from 'react'
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import loginValidator from '../../validators/loginValidator';
+import React from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import loginValidator from "../../validators/loginValidator";
 
 const initialFormData = {
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 };
 
-const initialFormError = {  
-  email: '',
-  password: '',
+const initialFormError = {
+  email: "",
+  password: "",
 };
 
 export default function login() {
-
   const [formData, setFormData] = useState(initialFormData);
   const [formError, setFormError] = useState(initialFormError);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.email]: e.target.value }));
-  }
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   //handle form submit
   const handleSubmit = async (e) => {
@@ -33,10 +32,7 @@ export default function login() {
       password: formData.password,
     });
 
-    if (
-      errors.email ||
-      errors.password 
-    ) {
+    if (errors.email || errors.password) {
       setFormError(errors);
     } else {
       //Api request from back end
@@ -57,7 +53,7 @@ export default function login() {
         toast.success(data.message, {
           position: "top-right",
           autoClose: 2000,
-        })
+        });
 
         setFormData(initialFormData);
         setFormError(initialFormError);
@@ -67,10 +63,10 @@ export default function login() {
       } catch (error) {
         const response = error.response;
         const data = response.data;
-        toast.error(data.message,{
+        toast.error(data.message, {
           position: "top-right",
           autoClose: 2000,
-        })
+        });
         setLoading(false);
         error.message;
       }
@@ -78,45 +74,45 @@ export default function login() {
     console.log(formData);
   };
 
-
-
   return (
-    <div className='form-container'>
-      <form className='inner-container' onSubmit={handleSubmit}>
-        <h2 className='form-title'>Login Form</h2>
+    <div className="form-container">
+      <form className="inner-container" onSubmit={handleSubmit}>
+        <h2 className="form-title">Login Form</h2>
 
-        <div className='form-group'>
+        <div className="form-group">
           <label>Email</label>
           <input
-          className='form-control'
-            type='email'
-            name='email'
-            placeholder='sadeepfernando@gmail.com'
+            className="form-control"
+            type="email"
+            name="email"
+            placeholder="sadeepfernando@gmail.com"
             value={formData.email}
             onChange={handleChange}
-            />
-            {formError.email && <p className='error'>{formError.email}</p>}
+          />
+          {formError.email && <p className="error">{formError.email}</p>}
         </div>
 
-        <div className='form-group'>
+        <div className="form-group">
           <label>Password</label>
           <input
-          className='form-control'
-            type='password'
-            name='password'
-            placeholder='*********'
+            className="form-control"
+            type="password"
+            name="password"
+            placeholder="*********"
             value={formData.password}
             onChange={handleChange}
-            />
-            {formError.password && <p className='error'>{formError.password}</p>}
+          />
+          {formError.password && <p className="error">{formError.password}</p>}
         </div>
 
-        <div className='form-group'>
-          <input type='submit' value='Login' className='button' />
+        <div className="form-group">
+          <input
+            type="submit"
+            value={`${loading ? "Loading.." : "Login"}`}
+            className="button"
+          />
         </div>
-
       </form>
-      
     </div>
-  )
+  );
 }
