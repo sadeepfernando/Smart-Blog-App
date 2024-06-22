@@ -40,16 +40,15 @@ export default function login() {
         setLoading(true);
 
         //Api request
-        const requestBody = {
-          email: formData.email,
-          password: formData.password,
-        };
-
         const response = await axios.post(
           "http://localhost:8000/api/v1/auth/signin",
-          requestBody
+          formData
         );
         const data = response.data;
+
+        //store response data in the window storage
+        window.localStorage.setItem("blogData", JSON.stringify(data));
+        
         toast.success(data.message, {
           position: "top-right",
           autoClose: 2000,
@@ -83,7 +82,7 @@ export default function login() {
           <label>Email</label>
           <input
             className="form-control"
-            type="email"
+            type="text"
             name="email"
             placeholder="sadeepfernando@gmail.com"
             value={formData.email}
