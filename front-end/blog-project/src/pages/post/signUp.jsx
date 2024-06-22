@@ -1,5 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import signupValidator from "../../validators/signupValidator";
@@ -26,6 +27,9 @@ export default function signUp() {
 
   //for api request
   const [loading, setLoading] = useState(false);
+
+  //for navigate to the login page
+  const navigate = useNavigate();
 
   //to handle events
   const handleChange = (e) => {
@@ -76,6 +80,7 @@ export default function signUp() {
         setFormError(initialFormError);
 
         setLoading(false);
+        navigate("/login");
       } catch (error) {
         const response = error.response;
         const data = response.data;
