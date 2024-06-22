@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const cors = require('cors');
 dotenv.config();
 const mongoDbConnection = require('./init/mongodb');
 const {authRoutes, categoryRoutes, fileRoutes , postRoutes } = require('./routes/index');
@@ -15,6 +16,7 @@ const app = express();
 mongoDbConnection();
 
 //third party module import
+app.use(cors(origin='http://127.0.0.1:5173'));
 app.use(express.json({limit:'500mb'}));
 app.use(bodyParser.urlencoded({limit:'500mb',extended:true}));
 app.use(morgan("dev"));
