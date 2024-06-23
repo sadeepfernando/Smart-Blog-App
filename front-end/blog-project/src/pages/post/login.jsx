@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import loginValidator from "../../validators/loginValidator";
+import { useNavigate } from "react-router-dom";
 
 const initialFormData = {
   email: "",
@@ -18,6 +19,8 @@ export default function login() {
   const [formData, setFormData] = useState(initialFormData);
   const [formError, setFormError] = useState(initialFormError);
   const [loading, setLoading] = useState(false);
+
+  const naviagate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -59,6 +62,7 @@ export default function login() {
         setFormError(initialFormError);
 
         setLoading(false);
+        naviagate("/");
         
       } catch (error) {
         const response = error.response;
