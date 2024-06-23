@@ -16,7 +16,7 @@ const app = express();
 mongoDbConnection();
 
 //third party module import
-app.use(cors(origin='http://127.0.0.1:5173'));
+app.use(cors(origin='http://localhost:5173'));
 app.use(express.json({limit:'500mb'}));
 app.use(bodyParser.urlencoded({limit:'500mb',extended:true}));
 app.use(morgan("dev"));

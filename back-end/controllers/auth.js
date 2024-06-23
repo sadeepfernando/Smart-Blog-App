@@ -53,7 +53,7 @@ const signInController = async(req,res,next) =>{
         const token = generateToken(user);
 
         res.status(200)
-        .json({code:200,status:true,message:'User signIn sucessfully', data:{token}});
+        .json({code:200,status:true,message:'User signIn sucessfully', data:{token, user }});
 
     }catch(error){
         next(error);

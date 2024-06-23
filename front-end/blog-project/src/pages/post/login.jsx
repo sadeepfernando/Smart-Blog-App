@@ -47,7 +47,8 @@ export default function login() {
         const data = response.data;
 
         //store response data in the window storage
-        window.localStorage.setItem("blogData", JSON.stringify(data));
+        window.localStorage.setItem("blogData", JSON.stringify(data.data));
+        console.log(data);
         
         toast.success(data.message, {
           position: "top-right",
@@ -58,7 +59,7 @@ export default function login() {
         setFormError(initialFormError);
 
         setLoading(false);
-        navigate("/");
+        
       } catch (error) {
         const response = error.response;
         const data = response.data;
