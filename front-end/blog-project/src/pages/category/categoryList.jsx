@@ -60,7 +60,12 @@ export default function categoryList() {
             <td>24/5/2000</td>
             <td>24/5/2024</td>
             <td>
-              <button className="button">Update</button>
+              <button
+                className="button"
+                onClick={() => navigate("update-category")}
+              >
+                Update
+              </button>
               <button className="button">Delete</button>
             </td>
           </tr>

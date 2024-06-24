@@ -11,6 +11,7 @@ import PublicLayout from "../src/components/layout/publicLayout";
 import Login from "./pages/post/login";
 import Signup from "./pages/post/signUp";
 import NewCategory from "./pages/category/newCategory";
+import UpdateCategory from "./pages/category/updateCategory";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="categories" element={<CategoryList />} />
           <Route path="categories/new-category" element={<NewCategory />} />
+          <Route path="categories/update-category" element={<UpdateCategory />} />
           <Route path="posts" element={<PostList />} />
           <Route path="profile" element={<Profile />} />
           <Route path="setting" element={<Setting />} />
