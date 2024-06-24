@@ -1,10 +1,24 @@
-import { useNavigate } from 'react-router-dom'
-
-
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
 import React from "react";
+import addCategoryValidator from '../../validators/addCategoryValidator';
+
+const initialFormData = {
+  title :'',
+  desc:''
+};
+
+const initialFormError = {
+  title:'',
+}
 
 export default function newCategory() {
-
+  const [formData, setFormData] = useState(initialFormData);
+  const [formError, setFormError] = useState(initialFormError);
+  const [loading, setLoading] = useState(false);
+  
   const navigate = useNavigate();
 
   return (
