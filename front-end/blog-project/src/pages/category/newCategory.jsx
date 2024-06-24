@@ -26,7 +26,7 @@ export default function newCategory() {
     setFormData((prev) =>({...prev, [e.target.name]: e.target.value}))
   };
 
-  const handleSubmit = async(e) =>{
+  const handleSubmit = async (e) =>{
     e.preventDefault();
 
     const errors = addCategoryValidator({title: formData.title});

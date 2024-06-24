@@ -2,18 +2,18 @@ import axios from "axios";
 
 const axiosInstance = axios.create({baseURL: "http://localhost:8000/api/v1"});
 
-axiosInstance.interceptors.request.use((request) =>{
+axiosInstance.interceptors.request.use((req) =>{
     const stringifyBlogData = window.localStorage.getItem("blogData");
 
     if(stringifyBlogData){
         const blogData = JSON.parse(stringifyBlogData);
         const token = blogData.token;
 
-        request.headers.Authorization = `Bearer ${token}`
+        req.headers.Authorization = `Bearer ${token}`;
     }
 
-    return request;
-})
+    return req;
+});
 
 
 export default axiosInstance;
