@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../utils/axiosInstance';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import React from "react";
@@ -38,7 +38,7 @@ export default function newCategory() {
         setLoading(true);
 
         //Api request
-        const response = await axios.post('http://localhost:8000/api/v1/category', formData);
+        const response = await axios.post('/category', formData);
         const data = response.data;
 
         toast.success(data.message,{
@@ -58,6 +58,7 @@ export default function newCategory() {
           autoClose: 2000,
         });
         setLoading(false);
+        setFormError(initialFormError);
         error.message;
       }
 

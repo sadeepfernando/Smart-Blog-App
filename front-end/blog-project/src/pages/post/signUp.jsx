@@ -1,7 +1,7 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../utils/axiosInstance";
 import { useState } from "react";
 import signupValidator from "../../validators/signupValidator";
 
@@ -67,7 +67,7 @@ export default function signUp() {
         };
 
         const response = await axios.post(
-          "http://localhost:8000/api/v1/auth/signup",
+          "/auth/signup",
           requestBody
         );
         const data = response.data;

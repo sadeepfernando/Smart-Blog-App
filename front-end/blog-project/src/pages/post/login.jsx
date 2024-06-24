@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axios from "../../utils/axiosInstance";
 import loginValidator from "../../validators/loginValidator";
 import { useNavigate } from "react-router-dom";
 
@@ -44,7 +44,7 @@ export default function login() {
 
         //Api request
         const response = await axios.post(
-          "http://localhost:8000/api/v1/auth/signin",
+          "/auth/signin",
           formData
         );
         const data = response.data;
@@ -65,6 +65,8 @@ export default function login() {
         naviagate("/");
         
       } catch (error) {
+        
+
         const response = error.response;
         const data = response.data;
         toast.error(data.message, {
@@ -72,6 +74,7 @@ export default function login() {
           autoClose: 2000,
         });
         setLoading(false);
+        setFormError(initialFormError);
         error.message;
       }
     }
