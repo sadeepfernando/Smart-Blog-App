@@ -18,14 +18,60 @@ export default function newCategory() {
   const [formData, setFormData] = useState(initialFormData);
   const [formError, setFormError] = useState(initialFormError);
   const [loading, setLoading] = useState(false);
-  
+
   const navigate = useNavigate();
+
+  
+  const handleChange = (e)=>{
+    setFormData((prev) =>({...prev, [e.target.name]: e.target.value}))
+  };
+
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+
+    const errors = addCategoryValidator({title: formData.title});
+
+    if(errors.title){
+      setFormError(errors);
+    }else{
+      try {
+        setLoading(true);
+
+        //Api request
+        const response = await axios.post('http://localhost:8000/api/v1/category', formData);
+        const data = response.data;
+
+        toast.success(data.message,{
+          position: 'top-right',
+          autoClose: 2000,
+        });
+        setFormData(initialFormData);
+        setFormError(initialFormError);
+        setLoading(false);
+        navigate('/categories');
+        
+      } catch (error) {
+        const response = error.response;
+        const data = response.data;
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 2000,
+        });
+        setLoading(false);
+        error.message;
+      }
+
+    }
+  }
+
+
 
   return (
     <div>
       <button className="button button-block" onClick={() => navigate(-1)}>Go Back</button>
+
       <div className="form-container">
-        <for className="inner-container">
+        <form className="inner-container" onSubmit={handleSubmit}>
           <h2 className="form-title"> New Category</h2>
 
           <div className="form-group">
@@ -35,7 +81,10 @@ export default function newCategory() {
               name="title"
               className="form-control"
               placeholder="Technology"
+              value={formData.title}
+              onChange={handleChange}
             />
+            {formError.title && <p className="error">{formError.title}</p>}
           </div>
 
           <div className="form-group">
@@ -45,14 +94,16 @@ export default function newCategory() {
               name="desc"
               className="form-control"
               placeholder="Description"
+              value={formData.desc}
+              onChange={handleChange}
             ></textarea>
           </div>
 
           <div className="from-group">
-            <input type="submit" className="button" value='Add' />
+            <input type="submit" className="button" value={`${loading ? "Adding..." : "Add"}`} />
           </div>
 
-        </for>
+        </form>
       </div>
     </div>
   );
