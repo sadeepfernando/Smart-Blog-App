@@ -6,6 +6,7 @@ import axios from '../../utils/axiosInstance';
 
 export default function categoryList() {
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +16,8 @@ export default function categoryList() {
 
         //api request
         const response = await axios.get("/category");
-        const data = response.data;
+        const data = response.data.data;
+        setCategories(data.categories);
         console.log(data);
 
         setLoading(false);
@@ -64,52 +66,20 @@ export default function categoryList() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>category 1</td>
-            <td>description 1</td>
-            <td>24/5/2000</td>
-            <td>24/5/2024</td>
+          {categories.map((category) =>(
+            <tr key={categories._id}>
+            <td>{category.title}</td>
+            <td>{category.desc}</td>
+            <td>{category.ceatedAt}</td>
+            <td>{category.updatedAt}</td>
             <td>
-              <button className="button">Update</button>
+              <button className="button" onClick={()=>navigate('update-category')}>Update</button>
               <button className="button">Delete</button>
             </td>
           </tr>
-          <tr>
-            <td>category 2</td>
-            <td>description 2</td>
-            <td>24/5/2000</td>
-            <td>24/5/2024</td>
-            <td>
-              <button className="button">Update</button>
-              <button className="button">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>category 3</td>
-            <td>description 3</td>
-            <td>24/5/2000</td>
-            <td>24/5/2024</td>
-            <td>
-              <button
-                className="button"
-                onClick={() => navigate("update-category")}
-              >
-                Update
-              </button>
-              <button className="button">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>category 4</td>
-            <td>description 4</td>
-            <td>24/5/2000</td>
-            <td>24/5/2024</td>
-            <td>
-              <button className="button">Update</button>
-              <button className="button">Delete</button>
-            </td>
-          </tr>
+          ))}
         </tbody>
+
       </table>
     </div>
   );
