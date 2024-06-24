@@ -1,8 +1,38 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import axios from '../../utils/axiosInstance';
 
 export default function categoryList() {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        setLoading(true);
+
+        //api request
+        const response = await axios.get("/category");
+        const data = response.data;
+        console.log(data);
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+
+        const response = error.response;
+        const data = response.data;
+        toast.error(data.message,{
+          position:toast.POSITION.TOP_RIGHT,
+          autoClose : 2000
+        });
+        
+      }
+    };
+    getCategories();
+  }, []);
 
   return (
     <div>
