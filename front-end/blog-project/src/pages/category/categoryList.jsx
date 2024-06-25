@@ -22,7 +22,7 @@ export default function categoryList() {
         setLoading(true);
 
         //api request
-        const response = await axios.get("/category");
+        const response = await axios.get(`/category?page=${currentPage}`);
         const data = response.data.data;
         setCategories(data.categories);
         setTotalPage(data.pages);
@@ -41,7 +41,7 @@ export default function categoryList() {
       }
     };
     getCategories();
-  }, []);
+  }, [currentPage]);
 
   //for the pagination
   useEffect(() => {
@@ -56,6 +56,21 @@ export default function categoryList() {
       setPageCount([]);
     }
   }, [totalPage]);
+
+  //to handle previous button
+  const handlePrev = () => {
+    setCurrentPage((prev) => prev - 1);
+  };
+
+  //to handle next button
+  const handleNext = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  //to handle 1,2,3 page buttons
+  const handlePage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   console.log(pageCount);
 
@@ -116,13 +131,38 @@ export default function categoryList() {
         </table>
       )}
 
-      <div className="pag-container">
-        <button className="pag-button">prev</button>
-        <button className="pag-button">1</button>
-        <button className="pag-button">2</button>
-        <button className="pag-button">3</button>
-        <button className="pag-button">next</button>
-      </div>
+      {pageCount.length > 0 && (
+        <div className="pag-container">
+          <button
+            className="pag-button"
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+          >
+            prev
+          </button>
+
+          {pageCount.map((pageNumber, index) => (
+            <button
+              className="pag-button"
+              key={index}
+              onClick={() => handlePage(pageNumber)}
+              style={{
+                backgroundColor: currentPage === pageNumber ? "#ccc" : "",
+              }}
+            >
+              {pageNumber}
+            </button>
+          ))}
+
+          <button
+            className="pag-button"
+            onClick={handleNext}
+            disabled={currentPage === totalPage}
+          >
+            next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
