@@ -2,9 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axios from '../../utils/axiosInstance';
-import moment from 'moment';  
-
+import axios from "../../utils/axiosInstance";
+import moment from "moment";
 
 export default function categoryList() {
   const [loading, setLoading] = useState(false);
@@ -35,19 +34,30 @@ export default function categoryList() {
 
         const response = error.response;
         const data = response.data;
-        toast.error(data.message,{
-          position:toast.POSITION.TOP_RIGHT,
-          autoClose : 2000
+        toast.error(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
         });
-        
       }
     };
     getCategories();
   }, []);
 
+  //for the pagination
   useEffect(() => {
+    if (totalPage >= 1) {
+      let tempPageCount = [];
 
-  },[totalPage]);
+      for (let i = 1; i <= totalPage; i++) {
+        tempPageCount = [...tempPageCount, i];
+      }
+      setPageCount(tempPageCount);
+    } else {
+      setPageCount([]);
+    }
+  }, [totalPage]);
+
+  console.log(pageCount);
 
   return (
     <div>
@@ -66,36 +76,53 @@ export default function categoryList() {
         placeholder="Search Here"
         className="search-input"
       />
-    {loading ? 'Loading...': (
-      
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Created At</th>
-            <th>Updated At</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+      {loading ? (
+        "Loading..."
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {categories.map((category) =>(
-            <tr key={categories._id}>
-            <td>{category.title}</td>
-            <td>{category.desc}</td>
-            <td>{moment(category.ceatedAt).format("YYYY-MM-DD HH:mm:ss")}</td>
-            <td>{moment(category.updatedAt).format("YYYY-MM-DD HH:mm:ss")}</td>
-            <td>
-              <button className="button" onClick={()=>navigate('update-category')}>Update</button>
-              <button className="button">Delete</button>
-            </td>
-          </tr>
-          ))}
-        </tbody>
+          <tbody>
+            {categories.map((category) => (
+              <tr key={categories._id}>
+                <td>{category.title}</td>
+                <td>{category.desc}</td>
+                <td>
+                  {moment(category.ceatedAt).format("YYYY-MM-DD HH:mm:ss")}
+                </td>
+                <td>
+                  {moment(category.updatedAt).format("YYYY-MM-DD HH:mm:ss")}
+                </td>
+                <td>
+                  <button
+                    className="button"
+                    onClick={() => navigate("update-category")}
+                  >
+                    Update
+                  </button>
+                  <button className="button">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
-      </table>
-    )}
+      <div className="pag-container">
+        <button className="pag-button">prev</button>
+        <button className="pag-button">1</button>
+        <button className="pag-button">2</button>
+        <button className="pag-button">3</button>
+        <button className="pag-button">next</button>
+      </div>
     </div>
   );
 }
