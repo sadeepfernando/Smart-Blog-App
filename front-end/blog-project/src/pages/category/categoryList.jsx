@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from '../../utils/axiosInstance';
+import moment from 'moment';  
+
 
 export default function categoryList() {
   const [loading, setLoading] = useState(false);
@@ -53,7 +55,8 @@ export default function categoryList() {
         placeholder="Search Here"
         className="search-input"
       />
-
+    {loading ? 'Loading...': (
+      
       <table>
         <thead>
           <tr>
@@ -70,8 +73,8 @@ export default function categoryList() {
             <tr key={categories._id}>
             <td>{category.title}</td>
             <td>{category.desc}</td>
-            <td>{category.ceatedAt}</td>
-            <td>{category.updatedAt}</td>
+            <td>{moment(category.ceatedAt).format("YYYY-MM-DD HH:mm:ss")}</td>
+            <td>{moment(category.updatedAt).format("YYYY-MM-DD HH:mm:ss")}</td>
             <td>
               <button className="button" onClick={()=>navigate('update-category')}>Update</button>
               <button className="button">Delete</button>
@@ -81,6 +84,7 @@ export default function categoryList() {
         </tbody>
 
       </table>
+    )}
     </div>
   );
 }
