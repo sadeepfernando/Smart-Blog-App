@@ -9,6 +9,12 @@ import moment from 'moment';
 export default function categoryList() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+
+  //to get pages(pagination)
+  const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageCount, setPageCount] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +26,7 @@ export default function categoryList() {
         const response = await axios.get("/category");
         const data = response.data.data;
         setCategories(data.categories);
+        setTotalPage(data.pages);
         console.log(data);
 
         setLoading(false);
@@ -37,6 +44,10 @@ export default function categoryList() {
     };
     getCategories();
   }, []);
+
+  useEffect(() => {
+
+  },[totalPage]);
 
   return (
     <div>
