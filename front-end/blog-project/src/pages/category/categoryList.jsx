@@ -88,7 +88,7 @@ export default function categoryList() {
       const response = error.response;
       const data = response.data;
       toast.error(data.message, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: 'top-right',
         autoClose: 2000,
       });
       
@@ -134,7 +134,7 @@ export default function categoryList() {
           <tbody>
             {categories.map((category) => (
               <tr key={categories._id}>
-                <td>{category.title}</td>
+                <td >{category.title}</td>
                 <td>{category.desc}</td>
                 <td>
                   {moment(category.ceatedAt).format("YYYY-MM-DD HH:mm:ss")}
@@ -145,7 +145,7 @@ export default function categoryList() {
                 <td>
                   <button
                     className="button"
-                    onClick={() => navigate("update-category")}
+                    onClick={() => navigate(`update-category/${category._id}`)}
                   >
                     Update
                   </button>
