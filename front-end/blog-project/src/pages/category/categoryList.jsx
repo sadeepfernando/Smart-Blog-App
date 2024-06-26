@@ -13,6 +13,7 @@ export default function categoryList() {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ export default function categoryList() {
         setLoading(true);
 
         //api request
-        const response = await axios.get(`/category?page=${currentPage}`);
+        const response = await axios.get(`/category?page=${currentPage}&q=${searchValue}`);
         const data = response.data.data;
         setCategories(data.categories);
         setTotalPage(data.pages);
@@ -72,7 +73,31 @@ export default function categoryList() {
     setCurrentPage(pageNumber);
   };
 
+  const handleChange = async(e) =>{
+    try {
+      const input = e.target.value;
+      setSearchValue(input);
+
+      const response = await axios.get(`/category?q=${input}&page=${currentPage}`);
+      const data = response.data.data;
+
+      setCategories(data.categories);
+      setTotalPage(data.pages);
+
+    } catch (error) {
+      const response = error.response;
+      const data = response.data;
+      toast.error(data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
+      
+    }
+  }
+
   console.log(pageCount);
+
+
 
   return (
     <div>
@@ -90,6 +115,7 @@ export default function categoryList() {
         name="search"
         placeholder="Search Here"
         className="search-input"
+        onChange={handleChange}
       />
       {loading ? (
         "Loading..."
