@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosInstance";
 import moment from "moment";
-import { Modal, Button} from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 
 export default function categoryList() {
   const [loading, setLoading] = useState(false);
@@ -16,6 +16,7 @@ export default function categoryList() {
   const [pageCount, setPageCount] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [showModel, setShowModel] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -25,7 +26,9 @@ export default function categoryList() {
         setLoading(true);
 
         //api request
-        const response = await axios.get(`/category?page=${currentPage}&q=${searchValue}`);
+        const response = await axios.get(
+          `/category?page=${currentPage}&q=${searchValue}`
+        );
         const data = response.data.data;
         setCategories(data.categories);
         setTotalPage(data.pages);
@@ -75,31 +78,58 @@ export default function categoryList() {
     setCurrentPage(pageNumber);
   };
 
-  const handleChange = async(e) =>{
+  const handleChange = async (e) => {
     try {
       const input = e.target.value;
       setSearchValue(input);
 
-      const response = await axios.get(`/category?q=${input}&page=${currentPage}`);
-      const data = response.data.data;
-
-      setCategories(data.categories);
-      setTotalPage(data.pages);
-
+       const response = await axios.get(
+          `/category?page=${currentPage}&q=${searchValue}`
+        );
+        const data = response.data.data;
+        setCategories(data.categories);
+        setTotalPage(data.pages);
     } catch (error) {
       const response = error.response;
       const data = response.data;
       toast.error(data.message, {
-        position: 'top-right',
+        position: "top-right",
         autoClose: 2000,
       });
-      
     }
-  }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`/category/${deleteId}`);
+
+      setShowModel(false);
+      const data = response.data;
+
+      toast.success(data.message, {
+        position: "top-right",
+        autoClose: 2000,
+      });
+
+      const response2 = await axios.get(
+        `/category?page=${currentPage}&q=${searchValue}`
+      );
+      const data2 = response2.data.data;
+      setCategories(data2.categories);
+      setTotalPage(data2.pages);
+
+    } catch (error) {
+      setShowModel(false);
+      const response = error.response;
+      const data = response.data;
+      toast.error(data.message, {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    }
+  };
 
   console.log(pageCount);
-
-
 
   return (
     <div>
@@ -136,7 +166,7 @@ export default function categoryList() {
           <tbody>
             {categories.map((category) => (
               <tr key={categories._id}>
-                <td >{category.title}</td>
+                <td>{category.title}</td>
                 <td>{category.desc}</td>
                 <td>
                   {moment(category.ceatedAt).format("YYYY-MM-DD HH:mm:ss")}
@@ -151,14 +181,21 @@ export default function categoryList() {
                   >
                     Update
                   </button>
-                  <button className="button" onClick={() => setShowModel(true)}>Delete</button>
+                  <button
+                    className="button"
+                    onClick={() => {
+                      setDeleteId(category._id);
+                      setShowModel(true);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-
       {pageCount.length > 0 && (
         <div className="pag-container">
           <button
@@ -192,19 +229,38 @@ export default function categoryList() {
         </div>
       )}
 
-      <Modal show={showModel} onHide={()=> setShowModel(false)}>
+
+      
+      <Modal
+        show={showModel}
+        onHide={() => {
+          setDeleteId(null);
+          setShowModel(false);
+        }}
+      >
         <Modal.Header closeButton={true}>
-          <Modal.Title>Are you sure you want to delete this category?</Modal.Title>
+          <Modal.Title>
+            Are you sure you want to delete this category?
+          </Modal.Title>
         </Modal.Header>
 
-        <Modal.Footer>  
-          <div style={{margin: '0 auto'}}>
-          <Button className = 'no-button' onClick={()=> setShowModel(false)}>No</Button>
-          <Button className="yes-button">Yes</Button>
+        <Modal.Footer>
+          <div style={{ margin: "0 auto" }}>
+            <Button
+              className="no-button"
+              onClick={() => {
+                setDeleteId(null);
+                setShowModel(false);
+              }}
+            >
+              No
+            </Button>
+            <Button className="yes-button" onClick={handleDelete}>
+              Yes
+            </Button>
           </div>
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 }

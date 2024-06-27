@@ -75,7 +75,7 @@ const deleteCategory = async(req,res, next) =>{
             throw new Error('Category not found');
         }
 
-        await category.findByIdAndDelete(id);
+        await Category.findByIdAndDelete(id);
 
         res.status(200)
         .json({code:200, status: true, message:'Category deleted successfully'});
