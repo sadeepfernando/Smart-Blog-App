@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosInstance";
 import moment from "moment";
+import { Modal, Button} from "react-bootstrap";
 
 export default function categoryList() {
   const [loading, setLoading] = useState(false);
@@ -14,6 +15,7 @@ export default function categoryList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [showModel, setShowModel] = useState(false);
 
   const navigate = useNavigate();
 
@@ -149,7 +151,7 @@ export default function categoryList() {
                   >
                     Update
                   </button>
-                  <button className="button">Delete</button>
+                  <button className="button" onClick={() => setShowModel(true)}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -189,6 +191,20 @@ export default function categoryList() {
           </button>
         </div>
       )}
+
+      <Modal show={showModel} onHide={()=> setShowModel(false)}>
+        <Modal.Header closeButton={true}>
+          <Modal.Title>Are you sure you want to delete this category?</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Footer>  
+          <div style={{margin: '0 auto'}}>
+          <Button className = 'no-button' onClick={()=> setShowModel(false)}>No</Button>
+          <Button className="yes-button">Yes</Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+
     </div>
   );
 }
