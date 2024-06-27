@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 //creating the category schema
-const categorySchema = mongoose.Schema({
+const categorySchema =  mongoose.Schema({
     title : {type: String, required:true},
     desc : String,
-    updatedBy : {type:mongoose.Types.ObjectId, ref:'user', required : true}
+    updatedBy : {type:mongoose.Types.ObjectId, ref:'user', required : true},
 },
 {timestamps: true}
 );

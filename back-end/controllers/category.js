@@ -124,7 +124,7 @@ const getCategory = async(req,res,next) =>{
     try{
         const { id } = req.params;
 
-        const category = await Category(id);
+        const category = await Category.findById(id);
         if(!category){
             res.code = 404;
             throw new Error(error);
