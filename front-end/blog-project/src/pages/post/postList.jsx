@@ -1,10 +1,16 @@
 import React from 'react'
 import cardImg from '../../assets/image/place.jpeg';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function postList() {
+
+  const navigate = useNavigate();
+
+
   return (
     <div>
-      <button className='button button-block'>Add New Post</button>
+      <button className='button button-block' onClick={()=> navigate('new-post')}>Add New Post</button>
       <h2 className='table-title'>Post List</h2>
 
       <input type="text" className='search-input' name='search' placeholder='Search here' />

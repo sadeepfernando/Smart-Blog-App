@@ -13,6 +13,7 @@ import Signup from "./pages/post/signUp";
 import NewCategory from "./pages/category/newCategory";
 import UpdateCategory from "./pages/category/updateCategory";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NewPost from "./pages/post/newPost";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="categories/new-category" element={<NewCategory />} />
           <Route path="categories/update-category/:id" element={<UpdateCategory />} />
           <Route path="posts" element={<PostList />} />
+          <Route path="posts/new-post" element={<NewPost/>}/>
           <Route path="profile" element={<Profile />} />
           <Route path="setting" element={<Setting />} />
         </Route>
