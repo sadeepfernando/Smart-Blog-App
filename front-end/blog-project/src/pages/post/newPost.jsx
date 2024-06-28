@@ -19,7 +19,7 @@ export default function newPost() {
             <textarea name="desc"  placeholder="This is the description" type='text' className='form-control'></textarea> 
           </div>
 
-          <div className="from-group">
+          <div className="form-group">
             <label>Select an Image</label>
             <input type="file" name="file" className='form-control' placeholder='Selected Image' />
           </div>
@@ -31,6 +31,10 @@ export default function newPost() {
               <option value="category 2">Category 2</option>
               <option value="category 3">Category 3</option>
             </select>
+          </div>
+
+          <div className="form-group">
+            <input type="submit" className='button' value='Add' />
           </div>
 
         </form>
