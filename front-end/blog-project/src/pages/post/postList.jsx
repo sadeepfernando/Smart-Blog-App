@@ -17,7 +17,7 @@ export default function postList() {
 
       <div className='flexbox-container wrap'>
 
-        <div className="post-card">
+        <div className="post-card" onClick={() => navigate('detail-post')}>
           <h4 className='card-title'>React Blog project</h4>
           <p className='card-desc'>This is the description of react blog project</p>
           <img src={cardImg} alt="mern" className='card-img' />
