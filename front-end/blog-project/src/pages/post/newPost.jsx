@@ -1,36 +1,104 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import axios from "../../utils/axiosInstance";
+
+const initialFormData = {
+  title: "",
+  desc: "",
+  category: "",
+};
+
+const initialFormError = {
+  title: "",
+  category: "",
+};
 
 export default function newPost() {
+  const [formData, setFormData] = useState(initialFormData);
+  const [formError, setFormError] = useState(initialFormError);
+  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const navigate = useNavigate();
 
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        //api request
+        const response = await axios.get( `/category`);
+        const data = response.data.data;
+        setCategories(data.categories);
+
+      } catch (error) {
+        const response = error.response;
+        const data = response.data;
+        toast.error(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+        });
+      }
+    };
+    getCategories();
+  }, []);
+
+  console.log(formData);
+
   return (
     <div>
-      <button className='button button-block' onClick={()=> navigate(-1)}>Go Back</button>
+      <button className="button button-block" onClick={() => navigate(-1)}>
+        Go Back
+      </button>
 
       <div className="form-container">
-        <form  className="inner-container">
+        <form className="inner-container">
           <h2 className="form-title">New Post</h2>
 
           <div className="form-group">
             <label>Title</label>
-            <input type="text" name="title"  placeholder="React Blog Project" className='form-control' />
+            <input
+              type="text"
+              name="title"
+              placeholder="React Blog Project"
+              className="form-control"
+              value={formData.title}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label>Description</label>
-            <textarea name="desc"  placeholder="This is the description" type='text' className='form-control'></textarea> 
+            <textarea
+              name="desc"
+              placeholder="This is the description"
+              type="text"
+              className="form-control"
+              value={formData.desc}
+              onChange={handleChange}
+            ></textarea>
           </div>
 
           <div className="form-group">
             <label>Select an Image</label>
-            <input type="file" name="file" className='form-control' placeholder='Selected Image' />
+            <input
+              type="file"
+              name="file"
+              className="form-control"
+              placeholder="Selected Image"
+            />
           </div>
 
           <div className="form-group">
             <label>Select a Category</label>
-            <select className='form-control'>
+            <select className="form-control" value={formData.category} onChange={handleChange}>
               <option value="category 1">Category 1</option>
               <option value="category 2">Category 2</option>
               <option value="category 3">Category 3</option>
@@ -38,11 +106,10 @@ export default function newPost() {
           </div>
 
           <div className="form-group">
-            <input type="submit" className='button' value='Add' />
+            <input type="submit" className="button" value="Add" />
           </div>
-
         </form>
       </div>
     </div>
-  )
+  );
 }
