@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosInstance";
+import addPostValidator from "../../validators/addPostValidator";
 
 const initialFormData = {
   title: "",
@@ -53,16 +54,16 @@ export default function newPost() {
   const handleSubmit = async (e) =>{
     e.preventDefault();
 
-    const errors = addCategoryValidator({title: formData.title});
+    const errors = addPostValidator({ title: formData.title, category: formData.category});
 
-    if(errors.title){
+    if(errors.title || errors.category){
       setFormError(errors);
     }else{
       try {
         setLoading(true);
 
         //Api request
-        const response = await axios.post('/category', formData);
+        const response = await axios.post('/post', formData);
         const data = response.data;
 
         toast.success(data.message,{
@@ -72,7 +73,7 @@ export default function newPost() {
         setFormData(initialFormData);
         setFormError(initialFormError);
         setLoading(false);
-        navigate('/categories');
+        navigate('/posts');
         
       } catch (error) {
         const response = error.response;
@@ -99,7 +100,7 @@ export default function newPost() {
       </button>
 
       <div className="form-container">
-        <form className="inner-container">
+        <form className="inner-container" onSubmit={ handleSubmit }>
           <h2 className="form-title">New Post</h2>
 
           <div className="form-group">
@@ -112,6 +113,7 @@ export default function newPost() {
               value={formData.title}
               onChange={handleChange}
             />
+            {formError.title && <p className="error">{formError.title}</p>}
           </div>
 
           <div className="form-group">
@@ -138,16 +140,17 @@ export default function newPost() {
 
           <div className="form-group">
             <label>Select a Category</label>
-            <select className="form-control" value={formData.category} onChange={handleChange}>
+            <select className="form-control" name="category" value={formData.category} onChange={handleChange}>
               {categories.map((category) => (
                 <option key={category._id} value={category._id}>{category.title}</option>
                 ))}
              
             </select>
+            {formError.category && <p className="error">{formError.category}</p>}
           </div>
 
           <div className="form-group">
-            <input type="submit" className="button" value="Add" />
+            <input type="submit" className="button" value={ `${loading ? 'Adding...': 'Add'}` } />
           </div>
         </form>
       </div>
