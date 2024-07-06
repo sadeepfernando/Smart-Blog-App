@@ -34,7 +34,7 @@ export default function newPost() {
     const getCategories = async () => {
       try {
         //api request
-        const response = await axios.get( `/category`);
+        const response = await axios.get( `/category?size=1000`);
         const data = response.data.data;
         setCategories(data.categories);
 
@@ -42,7 +42,7 @@ export default function newPost() {
         const response = error.response;
         const data = response.data;
         toast.error(data.message, {
-          position: toast.POSITION.TOP_RIGHT,
+          position: "top-right",
           autoClose: 2000,
         });
       }
@@ -99,9 +99,10 @@ export default function newPost() {
           <div className="form-group">
             <label>Select a Category</label>
             <select className="form-control" value={formData.category} onChange={handleChange}>
-              <option value="category 1">Category 1</option>
-              <option value="category 2">Category 2</option>
-              <option value="category 3">Category 3</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>{category.title}</option>
+                ))}
+             
             </select>
           </div>
 
