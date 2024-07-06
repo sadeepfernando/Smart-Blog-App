@@ -50,6 +50,46 @@ export default function newPost() {
     getCategories();
   }, []);
 
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+
+    const errors = addCategoryValidator({title: formData.title});
+
+    if(errors.title){
+      setFormError(errors);
+    }else{
+      try {
+        setLoading(true);
+
+        //Api request
+        const response = await axios.post('/category', formData);
+        const data = response.data;
+
+        toast.success(data.message,{
+          position: 'top-right',
+          autoClose: 2000,
+        });
+        setFormData(initialFormData);
+        setFormError(initialFormError);
+        setLoading(false);
+        navigate('/categories');
+        
+      } catch (error) {
+        const response = error.response;
+        const data = response.data;
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 2000,
+        });
+        setLoading(false);
+        setFormError(initialFormError);
+        error.message;
+      }
+
+    }
+  }
+
+
   console.log(formData);
 
   return (
