@@ -21,6 +21,7 @@ export default function newPost() {
   const [formError, setFormError] = useState(initialFormError);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [extensionError, setExtensionError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -90,6 +91,45 @@ export default function newPost() {
     }
   }
 
+  const handleFileChange = async(e) => {
+    console.log(e.target.files);
+
+    const fileInput = new FormData();
+    fileInput.append('image', e.target.files[0]);
+
+    const type = e.target.files[0].type;
+
+    if(type === 'image/jpg' || type === 'image/jpeg' || type === 'image/png'){
+      setExtensionError(null);
+
+      try {
+
+        //Api request
+        const response = await axios.post('/file/upload', fileInput);
+        const data = response.data;
+
+        toast.success(data.message,{
+          position: 'top-right',
+          autoClose: 2000,
+        });
+        
+        
+      } catch (error) {
+        const response = error.response;
+        const data = response.data;
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 2000,
+        });
+        setFormError(initialFormError);
+        error.message;
+      }
+
+    }else{
+      setExtensionError('Only allowed for valid image types');
+    }
+  };
+
 
   console.log(formData);
 
@@ -135,7 +175,9 @@ export default function newPost() {
               name="file"
               className="form-control"
               placeholder="Selected Image"
+              onChange={handleFileChange}
             />
+            {extensionError && <p className="error">{extensionError}</p>}
           </div>
 
           <div className="form-group">
