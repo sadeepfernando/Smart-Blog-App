@@ -33,7 +33,7 @@ const uploadFile = async(req,res, next) =>{
 
 
         res.status(201)
-        .json({code : 201,status:true, message:'File stored successfully'});
+        .json({code : 201,status:true, message:'File uploaded successfully', data:{key, _id : newFile._id} ,});
        
     }catch(error){
         next(error);

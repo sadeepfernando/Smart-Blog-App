@@ -107,6 +107,7 @@ export default function newPost() {
         //Api request
         const response = await axios.post('/file/upload', fileInput);
         const data = response.data;
+        console.log(data)
 
         toast.success(data.message,{
           position: 'top-right',
