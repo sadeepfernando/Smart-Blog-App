@@ -78,7 +78,7 @@ export default function categoryList() {
     setCurrentPage(pageNumber);
   };
 
-  const handleChange = async (e) => {
+  const handleSearch = async (e) => {
     try {
       const input = e.target.value;
       setSearchValue(input);
@@ -147,7 +147,7 @@ export default function categoryList() {
         name="search"
         placeholder="Search Here"
         className="search-input"
-        onChange={handleChange}
+        onChange={handleSearch}
       />
       {loading ? (
         "Loading..."

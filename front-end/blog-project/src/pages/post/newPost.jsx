@@ -23,6 +23,7 @@ export default function newPost() {
   const [categories, setCategories] = useState([]);
   const [extensionError, setExtensionError] = useState(null);
   const [fileId, setFileId] = useState(null);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const navigate = useNavigate();
 
@@ -110,6 +111,8 @@ export default function newPost() {
 
       try {
 
+        setIsDisabled(true);
+
         //Api request
         const response = await axios.post('/file/upload', fileInput);
         const data = response.data;
@@ -120,10 +123,13 @@ export default function newPost() {
           position: 'top-right',
           autoClose: 2000,
         });
+
+        setIsDisabled(false);
         
         
       } catch (error) {
         const response = error.response;
+        setIsDisabled(false);
         const data = response.data;
         toast.error(data.message, {
           position: "top-right",
@@ -200,7 +206,7 @@ export default function newPost() {
           </div>
 
           <div className="form-group">
-            <input type="submit" className="button" value={ `${loading ? 'Adding...': 'Add'}` } />
+            <input type="submit" className="button" disabled={isDisabled} value={ `${loading ? 'Adding...': 'Add'}` } />
           </div>
         </form>
       </div>

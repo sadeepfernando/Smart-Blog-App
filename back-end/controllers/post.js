@@ -108,44 +108,48 @@ const deletePost = async(req, res, next) =>{
     }
 }
 
-const getPost = async(req,res,next) =>{
+const getPost = async (req, res, next) => {
     try {
-        const { page, size , q , category } =req.query;
-
-        const pageNumber = parseInt(page) || 1;
-        const sizeNumber = parseInt(size) || 10;
-        const query = {};
-
-        if(q){
-            const search = new RegExp(q, 'i');
-
-            query = {
-                $or : [{title: search}]
-            }
-        }
-
-        if(category){
-            query = {...query, category};
-        }
-
-        const total = await Post.countDocuments(query);
-        const pages = Math.ceil(total / sizeNumber);
-
-        const posts = await Post.find(query)
-                        .populate('file')
-                        .populate('category')
-                        .populate('updatedBy ','-password -verificationCode -forgotPasswordCode')
-                        .sort({updatedBy: -1})
-                        .skip((pageNumber - 1) * sizeNumber)
-                        .limit(sizeNumber);
-          
-        res.status(200)
-        .json({code:200, status:true,message:'Get post list successfully', data:{posts,total,pages}});
-
+      const { page, size, q, category } = req.query;
+  
+      const pageNumber = parseInt(page) || 1;
+      const sizeNumber = parseInt(size) || 10;
+      let query = {};
+  
+      if (q) {
+        const search = new RegExp(q, "i");
+  
+        query = {
+          $or: [{ title: search }],
+        };
+      }
+  
+      if (category) {
+        query = { ...query, category };
+      }
+  
+      const total = await Post.countDocuments(query);
+      const pages = Math.ceil(total / sizeNumber);
+  
+      const posts = await Post.find(query)
+        .populate("file")
+        .populate("category")
+        .populate("updatedBy", "-password -verificationCode -forgotPasswordCode")
+        .sort({ _id: -1 })
+        .skip((pageNumber - 1) * sizeNumber)
+        .limit(sizeNumber);
+  
+      res.status(200).json({
+        code: 200,
+        status: true,
+        message: "Get post list successfully",
+        data: { posts, total, pages },
+      });
     } catch (error) {
-        next(error);
+      next(error);
     }
-}
+  };
+  
 
 const getSinglePost = async(req, res, next) =>{
     try {
