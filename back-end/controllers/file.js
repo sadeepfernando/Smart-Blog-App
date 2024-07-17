@@ -19,9 +19,10 @@ const uploadFile = async(req,res, next) =>{
         }
 
         const key = await uploadFileToS3({ file, extension });
+        let newFile = null;
 
         if(key){
-            const newFile = new File({
+             newFile = new File({
                 key:key,
                 size: file.size,
                 mimetype:file.mimetype,
@@ -33,7 +34,7 @@ const uploadFile = async(req,res, next) =>{
 
 
         res.status(201)
-        .json({code : 201,status:true, message:'File uploaded successfully', data:{key, _id : newFile._id} ,});
+        .json({code : 201,status:true, message:'File uploaded successfully', data:{key, _id:newFile._id}});
        
     }catch(error){
         next(error);

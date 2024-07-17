@@ -22,6 +22,7 @@ export default function newPost() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [extensionError, setExtensionError] = useState(null);
+  const [fileId, setFileId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -63,8 +64,13 @@ export default function newPost() {
       try {
         setLoading(true);
 
+        let input = formData;
+        
+        if(fileId){
+          input = {...input, file: fileId};
+        }
         //Api request
-        const response = await axios.post('/post', formData);
+        const response = await axios.post('/post', input);
         const data = response.data;
 
         toast.success(data.message,{
@@ -107,6 +113,7 @@ export default function newPost() {
         //Api request
         const response = await axios.post('/file/upload', fileInput);
         const data = response.data;
+        setFileId(data.data._Id);
         console.log(data)
 
         toast.success(data.message,{
